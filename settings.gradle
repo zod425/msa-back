@@ -1,0 +1,5 @@
+rootProject.name = 'msa-back'
+include 'member-service'
+include 'sms-service'
+include 'kafka-lib'
+

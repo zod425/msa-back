@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: member-service
+  profiles:
+    include: 'kafka'
+    active: 'local'
+  cloud:
+    loadbalancer:
+      ribbon:
+        enable: false
+
+server:
+  port: 9010
+
+
+sms:
+  exam:
+    url: 'http://localhost:9020'

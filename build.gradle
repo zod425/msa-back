@@ -1,0 +1,61 @@
+plugins {
+    id 'org.springframework.boot' version '2.6.6'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+}
+
+allprojects {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+        mavenLocal()
+    }
+}
+
+
+test {
+    useJUnitPlatform()
+}
+
+
+subprojects {
+    group = 'com.byulsoft.msa'
+    version = "0.0.1-SNAPSHOT"
+    sourceCompatibility = "1.8"
+
+    // spring boot version 에 따르는 spring cloud version
+    ext {
+        set('springCloudVersion', "2021.0.0")
+    }
+
+    apply plugin: 'java'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+
+    configurations {
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
+    }
+
+    // gradle 소스의 캐시체인지
+    configurations.all {
+        // don't cache changing modules at all
+        resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+    }
+
+    dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter'
+        implementation 'net.logstash.logback:logstash-logback-encoder:6.2'
+        annotationProcessor 'org.projectlombok:lombok'
+        compileOnly 'org.projectlombok:lombok'
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    }
+
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+        }
+    }
+}

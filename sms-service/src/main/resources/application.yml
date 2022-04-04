@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: sms-service
+  profiles:
+    include: 'kafka'
+    active: 'local'
+  cloud:
+    loadbalancer:
+      ribbon:
+        enable: false
+
+server:
+  port: 9020
+
+
