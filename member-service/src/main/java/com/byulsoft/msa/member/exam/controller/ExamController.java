@@ -1,16 +1,22 @@
 package com.byulsoft.msa.member.exam.controller;
 
 import com.byulsoft.msa.kafka.KafkaUtil;
+import com.byulsoft.msa.member.exam.dto.Member;
+import com.byulsoft.msa.member.exam.dto.ResponseDto;
 import com.byulsoft.msa.member.exam.feign.ExamFeign;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -24,8 +30,8 @@ public class ExamController {
         this.examFeign = examFeign;
     }
 
-    @GetMapping("/api/exam/kafka")
-    public ResponseEntity<String> examKafka(@RequestParam Map<String, Object> params) throws Exception{
+    @GetMapping("/api/member/exam/kafka")
+    public ResponseEntity<String> examKafka(@Valid Member params) throws Exception{
 
         log.info("kafka Start : {}", params);
 
@@ -35,27 +41,36 @@ public class ExamController {
         return ResponseEntity.status(HttpStatus.OK).header(null).body(params.toString());
     }
 
-    @GetMapping("/api/exam/getFeign")
-    public ResponseEntity<Map<String, Object>> getFeign(@RequestParam Map<String, Object> params) {
+    @GetMapping("/api/member/exam/getFeign")
+    public ResponseEntity<ResponseDto> getFeign(Member params) {
 
         log.info("getFeign Start : {}", params);
 
-        Map<String, Object> result = examFeign.getTicket(params);
+        ResponseDto result = examFeign.getMessage(params);
 
         log.info("getFeign End : {}", result);
 
         return ResponseEntity.status(HttpStatus.OK).header(null).body(result);
     }
 
-    @PostMapping("/api/exam/setFeign")
-    public ResponseEntity<Map<String, Object>> setFeign(@RequestParam Map<String, Object> params) {
+    @PostMapping("/api/member/exam/setFeign")
+    public ResponseEntity<ResponseDto> setFeign(@Valid @RequestBody Member params) {
 
         log.info("setFeign Start : {}", params);
 
-        Map<String, Object> result = examFeign.setTicket(params);
+        ResponseDto result = null;
+        try {
+             result = examFeign.setMessage(params);
+        } catch (FeignException e) {
+            e.printStackTrace();
+            result = new ResponseDto();
+            result.setMessage(e.getMessage());
+        }
+
 
         log.info("setFeign End : {}", result);
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).header(null).body(result);
+        return ResponseEntity.status(HttpStatus.OK).header(null).body(result);
     }
+
 }

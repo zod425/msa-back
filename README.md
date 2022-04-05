@@ -9,7 +9,7 @@ Front 에서 응답을 받아서 처리하는 서비스
 ## Sms-service
 
 ```sh
-Member-service 에서 응답을 받아서 처리 할 `서비스`
+Member-service 에서 응답을 받아서 처리 할 서비스 (Feign 및 Kafka)
 ```
 
 ## Kafka-lib

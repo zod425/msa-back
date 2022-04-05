@@ -1,5 +1,7 @@
 package com.byulsoft.msa.member.exam.feign;
 
+import com.byulsoft.msa.member.exam.dto.Member;
+import com.byulsoft.msa.member.exam.dto.ResponseDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FallbackFactory;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -9,17 +11,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @FeignClient(name="exam-feign", url="${sms.exam.url}", path = "/api/sms/exam", fallbackFactory = ExamFeignClientFallbackFactory.class)
 public interface ExamFeign {
 
     @GetMapping("/getMessage")
-    Map<String, Object> getTicket(@RequestParam Map<String, Object> param);
+    ResponseDto getMessage(@RequestParam Member param);
 
     @PostMapping("/setMessage")
-    Map<String, Object> setTicket(@RequestBody Map<String, Object> param);
+    ResponseDto setMessage(@RequestBody Member param);
 
 }
 
@@ -33,25 +34,23 @@ class ExamFeignClientFallbackFactory implements FallbackFactory<ExamFeign> {
         return new ExamFeign() {
 
             @Override
-            public Map<String, Object> getTicket(Map<String, Object> param) {
+            public ResponseDto getMessage(Member param) {
                 log.error(cause.getMessage());
 
-                Map<String, Object> result = new HashMap<String, Object>();
+                ResponseDto result = new ResponseDto();
 
-                result.put("result" , false);
-                result.put("resultMessage" , cause.getMessage());
+                result.setMessage(cause.getMessage());
 
                 return result;
             }
 
             @Override
-            public Map<String, Object> setTicket(Map<String, Object> param) {
+            public ResponseDto setMessage(Member param) {
                 log.error(cause.getMessage());
 
-                Map<String, Object> result = new HashMap<String, Object>();
+                ResponseDto result = new ResponseDto();
 
-                result.put("result" , false);
-                result.put("resultMessage" , cause.getMessage());
+                result.setMessage(cause.getMessage());
 
                 return result;
             }
