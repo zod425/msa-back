@@ -13,3 +13,22 @@ server:
   port: 9020
 
 
+---
+spring:
+  profiles:
+    active: k8s
+  cloud:
+    loadbalancer:
+      ribbon:
+        enable: false
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - info
+

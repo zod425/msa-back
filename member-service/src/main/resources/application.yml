@@ -16,3 +16,28 @@ server:
 sms:
   exam:
     url: 'http://localhost:9020'
+
+---
+spring:
+  profiles:
+    active: k8s
+  cloud:
+    loadbalancer:
+      ribbon:
+        enable: false
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - info
+server:
+  port: 8080
+
+sms:
+  exam:
+    url: 'http://sms-service.default.svc.cluster.local:8080'

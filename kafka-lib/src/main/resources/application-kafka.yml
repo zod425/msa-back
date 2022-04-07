@@ -1,11 +1,22 @@
+spring:
+  config:
+    activate:
+      on-profile: local
+
 kafka:
   bootstrap-servers: localhost:9092
   producer:
     transactional-id: prod
 
 ---
-
 spring:
   config:
     activate:
-      on-profile: local
+      on-profile: k8s
+      
+# k8s 카프카
+kafka:
+  bootstrap-servers: localhost:9093
+  producer:
+    transactional-id: prod
+      
