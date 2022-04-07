@@ -1,12 +1,12 @@
-package com.byulsoft.msa.member.exam.dto;
+package com.byulsoft.msa.member.exam.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Member {
 
     private Integer id;

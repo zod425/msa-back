@@ -1,4 +1,4 @@
-package com.byulsoft.msa.member.exam.dto;
+package com.byulsoft.msa.member.exam.model;
 
 import lombok.Data;
 

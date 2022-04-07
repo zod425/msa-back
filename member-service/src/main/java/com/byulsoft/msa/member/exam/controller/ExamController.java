@@ -1,34 +1,31 @@
 package com.byulsoft.msa.member.exam.controller;
 
 import com.byulsoft.msa.kafka.KafkaUtil;
-import com.byulsoft.msa.member.exam.dto.Member;
-import com.byulsoft.msa.member.exam.dto.ResponseDto;
+import com.byulsoft.msa.member.exam.model.Member;
+import com.byulsoft.msa.member.exam.model.ResponseDto;
 import com.byulsoft.msa.member.exam.feign.ExamFeign;
+import com.byulsoft.msa.member.exam.service.ExamService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.FeignException;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.Map;
 
 
 @Slf4j
 @RestController
+@AllArgsConstructor
+@Data
 public class ExamController {
 
     private ExamFeign examFeign;
-
-    public ExamController(ExamFeign examFeign) {
-        this.examFeign = examFeign;
-    }
+    private ExamService examService;
 
     @GetMapping("/api/member/exam/kafka")
     public ResponseEntity<String> examKafka(@Valid Member params) throws Exception{
@@ -38,7 +35,7 @@ public class ExamController {
         ObjectMapper mapper = new ObjectMapper();
         KafkaUtil.send("exam.kafka" , mapper.writeValueAsString(params));
 
-        return ResponseEntity.status(HttpStatus.OK).header(null).body(params.toString());
+        return ResponseEntity.ok(params.toString());
     }
 
     @GetMapping("/api/member/exam/getFeign")
@@ -50,7 +47,7 @@ public class ExamController {
 
         log.info("getFeign End : {}", result);
 
-        return ResponseEntity.status(HttpStatus.OK).header(null).body(result);
+        return ResponseEntity.ok(result);
     }
 
     @PostMapping("/api/member/exam/setFeign")
@@ -70,7 +67,7 @@ public class ExamController {
 
         log.info("setFeign End : {}", result);
 
-        return ResponseEntity.status(HttpStatus.OK).header(null).body(result);
+        return ResponseEntity.ok(result);
     }
 
 }

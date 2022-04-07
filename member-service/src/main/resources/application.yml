@@ -18,13 +18,15 @@ sms:
     url: 'http://localhost:9020'
 
 ---
+
 spring:
-  profiles:
-    active: k8s
   cloud:
     loadbalancer:
       ribbon:
         enable: false
+  config:
+    activate:
+      on-profile: k8s
 management:
   endpoint:
     health:

@@ -23,7 +23,7 @@ public class ExamController {
 
         log.info("10초간 대기 후에 응답 처리");
 
-        return ResponseEntity.status(HttpStatus.OK).header(null).body(params);
+        return ResponseEntity.ok(params);
     }
 
     @PostMapping("/api/sms/exam/setMessage")
@@ -31,6 +31,6 @@ public class ExamController {
 
         log.info("setTicket Info : {}" , params.toString());
 
-        return ResponseEntity.status(HttpStatus.OK).header(null).body(params);
+        return ResponseEntity.ok(params);
     }
 }
