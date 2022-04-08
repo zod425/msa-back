@@ -15,8 +15,8 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 @Slf4j
 public class ExamServiceImpl implements ExamService {
-    private ExamFeign examFeign;
 
+    private ExamFeign examFeign;
 
     @Override
     public void examKafka(Member params) throws JsonProcessingException {

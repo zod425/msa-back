@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
@@ -19,11 +20,15 @@ public class ExamController {
 
         log.info("getTicket Info : {}" , params.toString());
 
-        Thread.sleep(1000 * 10);
+        Thread.sleep(1000 * 3);
 
-        log.info("10초간 대기 후에 응답 처리");
+        log.info("3초간 대기 후에 응답 처리");
 
-        return ResponseEntity.ok(params);
+        Map<String, Object> returnMap = new HashMap<>();
+        returnMap.put("message", "성공");
+        returnMap.put("param", params);
+
+        return ResponseEntity.ok(returnMap);
     }
 
     @PostMapping("/api/sms/exam/setMessage")
