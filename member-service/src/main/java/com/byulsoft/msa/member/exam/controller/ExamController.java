@@ -17,55 +17,37 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-
 @Slf4j
 @RestController
 @AllArgsConstructor
 @Data
 public class ExamController {
 
-    private ExamFeign examFeign;
     private ExamService examService;
 
     @GetMapping("/api/member/exam/kafka")
     public ResponseEntity<String> examKafka(@Valid Member params) throws Exception{
 
-        log.info("kafka Start : {}", params);
-
-        ObjectMapper mapper = new ObjectMapper();
-        KafkaUtil.send("exam.kafka" , mapper.writeValueAsString(params));
+        examService.examKafka(params);
 
         return ResponseEntity.ok(params.toString());
     }
 
-    @GetMapping("/api/member/exam/getFeign")
-    public ResponseEntity<ResponseDto> getFeign(Member params) {
+    @GetMapping("/api/member/exam/testFeign")
+    public ResponseEntity<ResponseDto> testFeign(Member params) {
 
-        log.info("getFeign Start : {}", params);
-
-        ResponseDto result = examFeign.getMessage(params);
-
-        log.info("getFeign End : {}", result);
-
+        ResponseDto result = examService.testFeign(params);
         return ResponseEntity.ok(result);
     }
 
-    @PostMapping("/api/member/exam/setFeign")
-    public ResponseEntity<ResponseDto> setFeign(@Valid @RequestBody Member params) {
+    @PostMapping("/api/member/exam/testFeignError")
+    public ResponseEntity<ResponseDto> testFeignError(@Valid @RequestBody Member params) {
 
-        log.info("setFeign Start : {}", params);
+        log.info("testFeignError Start : {}", params);
 
-        ResponseDto result = null;
-        try {
-             result = examFeign.setMessage(params);
-        } catch (FeignException e) {
-            e.printStackTrace();
-            result = new ResponseDto();
-            result.setMessage(e.getMessage());
-        }
+        ResponseDto result = examService.testFeignError(params);
 
-
-        log.info("setFeign End : {}", result);
+        log.info("testFeignError End : {}", result);
 
         return ResponseEntity.ok(result);
     }
